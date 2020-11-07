@@ -14,3 +14,7 @@
 1. The application will start up with 2 players (Player 1 and Player 2).  And their 5 drawn poker cards from the deck.
 2. The "Find Winner" button will display in an alert which of the players has a winning hand, and what they won with.
 3. The "New Game" button will discard the current hands, and draw 5 new cards for each player.
+
+######## Online Version ########
+Try the app out at:
+https://pokergame20201107113144.azurewebsites.net/
