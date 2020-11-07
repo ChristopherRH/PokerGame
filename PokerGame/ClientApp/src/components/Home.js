@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Swal from 'sweetalert2'
 
 export class Home extends Component {
     static displayName = Home.name;
@@ -67,7 +68,11 @@ export class Home extends Component {
     async declareWinner() {
         const response = await fetch('pokergame/getwinner?playerInfo=' +  JSON.stringify(this.state.players));
         const data = await response.text();
-        alert(data);
+        Swal.fire({
+            title: 'Winner!',
+            text: data,
+            confirmButtonText: 'Ok'
+        })
     }
 
 
