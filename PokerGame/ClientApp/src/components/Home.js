@@ -47,7 +47,7 @@ export class Home extends Component {
             <div>
                 <h1 id="tabelLabel" >Poker Game</h1>
                 {contents}
-                <button className="btn btn-primary" onClick={this.declareWinner}>Find Winner</button>
+                <button className="btn btn-primary" onClick={this.declareWinner.bind(this)}>Find Winner</button>
                 &nbsp;&nbsp;
                 <button className="btn btn-primary" onClick={this.newGame.bind(this)}>New Game</button>
             </div>
@@ -65,7 +65,7 @@ export class Home extends Component {
     }
 
     async declareWinner() {
-        const response = await fetch('pokergame/getwinner');
+        const response = await fetch('pokergame/getwinner?playerInfo=' +  JSON.stringify(this.state.players));
         const data = await response.text();
         alert(data);
     }
