@@ -2,6 +2,7 @@
 using PokerGameCore.Attributes;
 using PokerGameCore.Model;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PokerGameCore.Service
@@ -61,35 +62,21 @@ namespace PokerGameCore.Service
             if(hand.Cards.Select(x => x.CardSuit).Distinct().Count() == 1)
             {
                 // 10 -> Ace == RoyalFlush
-                var numbers = hand.Cards.Select(x => x.CardNumber);
-                if(numbers.Contains(Numbers.CardNumbers.Ten) &&
-                    numbers.Contains(Numbers.CardNumbers.Jack) &&
-                    numbers.Contains(Numbers.CardNumbers.Queen) &&
-                    numbers.Contains(Numbers.CardNumbers.King) &&
-                    numbers.Contains(Numbers.CardNumbers.Ace))
+                var numbersFlush = hand.Cards.Select(x => x.CardNumber);
+                if (numbersFlush.Contains(Numbers.CardNumbers.Ten) &&
+                    numbersFlush.Contains(Numbers.CardNumbers.Jack) &&
+                    numbersFlush.Contains(Numbers.CardNumbers.Queen) &&
+                    numbersFlush.Contains(Numbers.CardNumbers.King) &&
+                    numbersFlush.Contains(Numbers.CardNumbers.Ace))
                 {
                     return new Tuple<HandResults, Numbers.CardNumbers>(HandResults.RoyalFlush, highCard);
                 }
 
                 // Any other set of numbers is a StraightFlush
-                var isStraight = true;
-                var orderedNumbers = numbers.OrderBy(x => (int)x).ToArray();
-                var sequenceStart = (int)orderedNumbers.First();
-                for(var i = 0; i<5; i++)
-                {
-                    if((int)orderedNumbers[i] == sequenceStart)
-                    {
-                        sequenceStart++;
-                        continue;
-                    }
-                    else
-                    {
-                        isStraight = false;
-                        break;
-                    }
-                }
+                var isStraightFlush = true;
+                isStraightFlush = IsStraight(numbersFlush, isStraightFlush);
 
-                if (isStraight)
+                if (isStraightFlush)
                 {
                     return new Tuple<HandResults, Numbers.CardNumbers>(HandResults.StraightFlush, highCard);
                 }
@@ -109,6 +96,16 @@ namespace PokerGameCore.Service
             if(grouping.Any(y => y.Count() == 3) && grouping.Any(y => y.Count() == 2))
             {
                 return new Tuple<HandResults, Numbers.CardNumbers>(HandResults.FullHouse, highCard);
+            }
+
+            // look for a straight
+            var isStraight = true;
+            var numbers = hand.Cards.Select(x => x.CardNumber);
+            isStraight = IsStraight(numbers, isStraight);
+
+            if (isStraight)
+            {
+                return new Tuple<HandResults, Numbers.CardNumbers>(HandResults.Straight, highCard);
             }
 
             // 3 of a kind
@@ -131,6 +128,33 @@ namespace PokerGameCore.Service
 
             // all we have is a high card
             return new Tuple<HandResults, Numbers.CardNumbers>(HandResults.HighCard, highCard);
+        }
+
+        /// <summary>
+        /// Determine if the cards sequence into a straight
+        /// </summary>
+        /// <param name="numbers"></param>
+        /// <param name="isStraight"></param>
+        /// <returns></returns>
+        private static bool IsStraight(IEnumerable<Numbers.CardNumbers> numbers, bool isStraight)
+        {
+            var orderedNumbers = numbers.OrderBy(x => (int)x).ToArray();
+            var sequenceStart = (int)orderedNumbers.First();
+            for (var i = 0; i < 5; i++)
+            {
+                if ((int)orderedNumbers[i] == sequenceStart)
+                {
+                    sequenceStart++;
+                    continue;
+                }
+                else
+                {
+                    isStraight = false;
+                    break;
+                }
+            }
+
+            return isStraight;
         }
     }
 }
