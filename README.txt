@@ -1,8 +1,8 @@
 ######## Set up ########
 1. Node js is required to build and deploy the solutions.  Install node js at https://nodejs.org/ and then restart your computer.
-2. Open the project in visual studio 2019, then right click the solution and select "Build project".  This will restore any nuget packages required, and download any npm packages required.
+2. Open the project in visual studio 2019, then right click the solution and select "Build".  This will restore any nuget packages required, and download any npm packages required.
 3. Open a terminal inside of the PokerGame project (e.g. /PokerGame/PokerGame) and run npm install to download all required modules
-4. The projuct can be started in debug mode now
+4. The project can be started in debug mode now
 5. For unit testing, you can right click the PokerGame.Tests project, and Run Tests, or use the "Test" menu option at the top of visual studio and select "Run all tests"
 
 
